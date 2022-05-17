@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Whiteboard</title>
+    <meta name="description"
+        content="A standalone JavaScript backed web based whiteboard. As long as your browser or device supports canvas provide an ID to an element on your page and it will be transformed into a whiteboard.">
+    <meta name="author" content="Caboodle Tech Inc">
+    <!-- The next 3 files are required for Whiteboard to work. -->
+    <link rel="stylesheet" href="css/katex.css">
+    <script src="js/whiteboard.js"></script>
+    <script src="js/katex.min.js"></script>
+    <!-- THESE STYLES ARE FOR THE DEMO ONLY. -->
+    <style type="text/css">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #page-wrapper {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="save" style="border: 1px solid red;">save</button>
+    <a id="download" download="test.png" href="" style="border: 1px solid red; display: none;">download</a>
+
+    <div id="page-wrapper">
+        <!-- This area will be filled with the whiteboard content. -->
+    </div>
+    <a id="link" download style="display: none">shouldnt be visible</a>
+
+    <script src="./js/html2Canvas.js"></script>
+    <script type="text/javascript">
+        let board = new Whiteboard();
+        board.init('page-wrapper');
+
+        const download = document.querySelector('button');
+        let node = document.getElementById('page-wrapper');
+
+
+        download.addEventListener("click", () => {
+            document.querySelector('.wb-second-controls').style.display = 'none';
+            document.querySelector('.wb-main-controls').style.display = 'none';
+
+            html2canvas(node).then(function (canvas) {
+                const imgData = canvas.toDataURL();
+                document.querySelector('.wb-second-controls').style.display = 'block'
+                document.querySelector('.wb-main-controls').style.display = 'block'
+                document.querySelector('#download').style.display = 'inline'
+                document.querySelector('#download').href = imgData;
+            });
+        });
+    </script>
+</body>
+
+</html>
